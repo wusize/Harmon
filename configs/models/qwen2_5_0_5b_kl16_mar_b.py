@@ -9,7 +9,14 @@ from transformers import AutoTokenizer
 
 
 llm_name_or_path = 'Qwen/Qwen2.5-0.5B-Instruct'
-prompt_template = PROMPT_TEMPLATE.qwen_chat
+prompt_template = dict(
+    SYSTEM='<|im_start|>system\n{system}<|im_end|>\n',
+    INSTRUCTION='<|im_start|>user\n{input}<|im_end|>\n<|im_start|>assistant\n',
+    SUFFIX='<|im_end|>',
+    SUFFIX_AS_EOS=True,
+    SEP='\n',
+    STOP_WORDS=['<|im_end|>', '<|endoftext|>'])
+
 tokenizer = dict(
     type=AutoTokenizer.from_pretrained,
     pretrained_model_name_or_path=llm_name_or_path,

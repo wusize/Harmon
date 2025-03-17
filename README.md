@@ -7,6 +7,10 @@ Harmon/
     ├── harmon_0.5b.pth
     ├── harmon_1.5b.pth
 ```
+It is recommended to use the following command to download the checkpoints
+```bash
+huggingface-cli download wusize/harmon  --local-dir checkpoints --repo-type model
+```
 
 
 ### Image-to-text 
