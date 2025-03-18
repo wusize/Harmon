@@ -98,7 +98,7 @@ if __name__ == '__main__':
 
         images = model.sample(**inputs, num_iter=args.num_iter, cfg=args.cfg, cfg_schedule=args.cfg_schedule,
                               temperature=args.temperature, progress=False, image_shape=(m, n))
-        images = rearrange(images, '(m n b) c h w -> b m h n w c', m=args.grid_size, n=args.grid_size)
+        images = rearrange(images, '(m n b) c h w -> b (m h) (n w) c', m=args.grid_size, n=args.grid_size)
 
         images = torch.clamp(
             127.5 * images + 128.0, 0, 255).to("cpu", dtype=torch.uint8).numpy()
