@@ -8,6 +8,7 @@ from transformers.cache_utils import DynamicCache
 from src.builder import BUILDER
 from tqdm import tqdm
 import torch.nn.functional as F
+from torch.nn.utils.rnn import pad_sequence
 
 
 def build_mlp(hidden_size, projector_dim, z_dim):
@@ -179,6 +180,23 @@ class Harmon(nn.Module):
             keys, values = past_key_values_
             keys.data = keys.data[:, :, :cur_len]
             values.data = values.data[:, :, :cur_len]
+
+    @torch.no_grad()
+    def prepare_text_conditions(self, prompt, cfg_prompt='Generate an image.'):
+        all_prompts = [self.prompt_template['INSTRUCTION'].format(input=prompt),
+                       self.prompt_template['INSTRUCTION'].format(input=cfg_prompt)]
+
+        input_ids = [self.tokenizer.encode(p, add_special_tokens=True, return_tensors='pt')[0]
+                     for p in all_prompts]
+        valid_lens = [len(input_ids_) for input_ids_ in input_ids]
+        input_ids = pad_sequence(input_ids, batch_first=True,
+                                 padding_value=self.tokenizer.eos_token_id)
+        attention_mask = torch.zeros_like(input_ids).bool()
+        for i in range(len(input_ids)):
+            attention_mask[i, :valid_lens[i]] = True
+
+        return dict(input_ids=input_ids.to(self.device),
+                    attention_mask=attention_mask.to(self.device))
 
     @torch.no_grad()
     def sample(self,
