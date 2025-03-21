@@ -48,3 +48,47 @@ The json file should look like:
   }
 ]
 ```
+
+
+### train
+
+```shell
+cd /path/to/Harmon
+source activate /your/env
+export NCCL_DEBUG=DEBUG
+export MKL_SERVICE_FORCE_INTEL=1
+
+
+MASTER_ADDR=$MLP_WORKER_0_HOST
+echo $MASTER_ADDR
+
+MASTER_PORT=$MLP_WORKER_0_PORT
+NNODES=8
+GPUS_PER_NODE=8
+export NCCL_DEBUG=INFO
+
+NODE_RANK=$(grep -oP 'worker-\K\d+' /etc/hosts | head -n 1)
+echo $NODE_RANK
+
+export PYTHONPATH=./:$PYTHONPATH
+export LAUNCHER="torchrun \
+    --nproc_per_node=$GPUS_PER_NODE \
+    --nnodes=$NNODES \
+    --node_rank=$NODE_RANK \
+    --master_addr=$MASTER_ADDR \
+    --master_port=$MASTER_PORT \
+    "
+
+export CMD="scripts/train.py \
+configs/train_example/qwen2_5_0_5b_kl16_mar_b_train_example.py \
+--launcher pytorch \
+--deepspeed deepspeed_zero2"
+
+echo $LAUNCHER
+echo $CMD
+
+bash -c "$LAUNCHER $CMD"
+
+sleep 60s
+
+```

@@ -26,8 +26,11 @@ from xtuner.tools.utils import (auto_dtype_of_deepspeed_config,
                                 get_seed_from_checkpoint)
 
 
-from mmengine.registry import RUNNERS
+from src.optimisers.constructor import MAROptimWrapperConstructor
+from mmengine.registry import OPTIM_WRAPPER_CONSTRUCTORS, RUNNERS
 from src.runners.custom_runner import CustomRunner
+OPTIM_WRAPPER_CONSTRUCTORS.register_module(name='MAROptimWrapperConstructor',
+                                           module=MAROptimWrapperConstructor)
 RUNNERS.register_module(name='CustomRunner', module=CustomRunner)
 
 
