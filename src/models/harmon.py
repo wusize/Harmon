@@ -8,7 +8,22 @@ from transformers.cache_utils import DynamicCache
 from src.builder import BUILDER
 from tqdm import tqdm
 import torch.nn.functional as F
+from mmengine.model import BaseModel
+from torch.autograd.function import Function
 from torch.nn.utils.rnn import pad_sequence
+from mmengine.logging import print_log
+from xtuner.model.utils import guess_load_checkpoint
+
+
+class _ScaleGradient(Function):
+    @staticmethod
+    def forward(ctx, input, scale):
+        ctx.scale = scale
+        return input
+
+    @staticmethod
+    def backward(ctx, grad_output):
+        return grad_output * ctx.scale, None
 
 
 def build_mlp(hidden_size, projector_dim, z_dim):
@@ -25,14 +40,20 @@ def mask_by_order(mask_len, order, bsz, seq_len):
     return masking
 
 
-class Harmon(nn.Module):
+class Harmon(BaseModel):
     def __init__(self,
                  vae,
                  vae_scale,
                  llm,
                  mar,
                  tokenizer,
-                 prompt_template):
+                 prompt_template,
+                 grad_scale=0.1,
+                 loss_weights={'image2text': 1.0, 'text2image': 1.0},
+                 pretrained_pth=None,
+                 freeze_llm=False,
+                 gradient_checkpointing=True
+                 ):
         super().__init__()
         # VAE
         self.vae = BUILDER.build(vae)
@@ -53,6 +74,30 @@ class Harmon(nn.Module):
         self.proj_out = build_mlp(hidden_size=self.llm.config.hidden_size,
                                   projector_dim=self.llm.config.hidden_size,
                                   z_dim=self.mar.encoder_embed_dim)
+        self.grad_scale = grad_scale
+        self.loss_weights = loss_weights
+
+        if pretrained_pth is not None:
+            pretrained_state_dict = guess_load_checkpoint(pretrained_pth)
+            info = self.load_state_dict(pretrained_state_dict, strict=False)
+            print_log(f'Load pretrained weight from {pretrained_pth}')
+
+        if freeze_llm:
+            self.llm.requires_grad_(False)
+
+        # gradient checkpointing
+        if gradient_checkpointing:
+            self.gradient_checkpointing_enable()
+        else:
+            self.gradient_checkpointing_disable()
+
+    def gradient_checkpointing_disable(self):
+        self.llm.gradient_checkpointing_disable()
+        self.mar.gradient_checkpointing_disable()
+
+    def gradient_checkpointing_enable(self):
+        self.llm.gradient_checkpointing_enable()
+        self.mar.gradient_checkpointing_enable()
 
     @property
     def llm_model(self):
@@ -336,6 +381,9 @@ class Harmon(nn.Module):
             x = self.encode(x)  # b m n c
             _, z_enc = self.extract_visual_feature(x)
 
+            if self.grad_scale is not None:
+                z_enc = _ScaleGradient.apply(z_enc, self.grad_scale)
+
             inputs_embeds = z_enc.new_zeros(*input_ids.shape, self.llm.config.hidden_size)
             inputs_embeds[input_ids == -200] = z_enc.flatten(0, 1)
             inputs_embeds[input_ids != -200] = self.llm.get_input_embeddings()(input_ids[input_ids != -200])
@@ -354,3 +402,22 @@ class Harmon(nn.Module):
         loss_i2t = F.cross_entropy(input=logits, target=labels)
 
         return loss_i2t + loss_null
+
+    def forward(self, data, data_samples=None, mode='loss'):
+        if mode == 'loss':
+            return self.compute_loss(data_dict=data)
+        else:
+            raise NotImplementedError
+
+    def compute_loss(self, data_dict):
+        # import pdb; pdb.set_trace()
+        losses = {}
+        for data_type, batch_data in data_dict.items():
+            if 'text2image' in data_type:
+                loss = self.text2image_loss(batch_data)
+            elif 'image2text' in data_type:
+                loss = self.image2text_loss(batch_data)
+            else:
+                raise NotImplementedError
+            losses[f'loss_{data_type}'] = loss * self.loss_weights[data_type]
+        return losses
