@@ -2,9 +2,13 @@
 
 ![](data/method.png)
 
-> [**Harmonizing Visual Representations for Unified Multimodal Understanding and Generation**](https://arxiv.org/abs/2406.05821),            
-> Size Wu, Wenwei Zhang, Lumin Xu, Sheng Jin, Zhonghua Wu, Qingyi Tao Wentao Liu, Wei Li, Chen Change Loy            
-> [Bibtex](https://github.com/wusize/Harmon#citation)
+> **[Harmonizing Visual Representations for Unified Multimodal Understanding and Generation](https://arxiv.org/abs/2406.05821)**
+>
+> Size Wu, Wenwei Zhang, Lumin Xu, Sheng Jin, Zhonghua Wu, Qingyi Tao, Wentao Liu, Wei Li, Chen Change Loy
+>
+> [![arXiv](https://img.shields.io/badge/arXiv-2406.05821-b31b1b.svg)](https://arxiv.org/abs/2406.05821)
+> [![Project Page](https://img.shields.io/badge/Project-Page-green)](https://wusize.github.io/projects/Harmon)
+> [![Bibtex](https://img.shields.io/badge/Cite-BibTeX-blue)](https://github.com/wusize/Harmon#citation)
 
 ## Introduction
 
@@ -15,15 +19,18 @@ performance on mainstream text-to-image generation benchmarks, and exhibits comp
 tasks. In this repo, we provide inference code to run Harmon for image understanding (image-to-text) and text-to-image
 generation, with two model variants Harmon-0.5B and Harmon-1.5B.
 
-## TODO
-- [x] Inference code and model checkpoints
-- [ ] Project page
-- [ ] Online demo
+## 🚀 Project Status
+
+| Task | Status |
+|------|--------|
+| 🛠️ Inference Code & Model Checkpoints | ✅ Released |
+| 🌐 Project Page | ✅ Finished |
+| 🤗 Online Demo | 🚧 Coming Soon |
 
 
 ## Usage
 
-### Required packages
+### 📦 Required Packages
 ```text
 mmengine
 transformers==4.45.2
@@ -31,8 +38,9 @@ timm==0.9.12
 flash_attn==2.3.4
 ```
 
-### Checkpoints
-Obtain checkpoints from [wusize/harmon](https://huggingface.co/wusize/harmon), and arrange the model checkpoints as
+### 📥 Checkpoints
+
+Download the model checkpoints from 🤗 [wusize/harmon](https://huggingface.co/wusize/harmon) and organize them as follows:
 ```text
 Harmon/
 ├── checkpoints
@@ -46,9 +54,7 @@ It is recommended to use the following command to download the checkpoints
 huggingface-cli download wusize/harmon  --local-dir checkpoints --repo-type model
 ```
 
-
-### Image-to-text 
-
+### 🖌️ Image-to-text Generation
 
 ```shell
 export PYTHONPATH=./:$PYTHONPATH
@@ -57,7 +63,9 @@ python scripts/image2text.py configs/models/qwen2_5_1_5b_kl16_mar_h.py \
          --image data/view.jpg --prompt "Describe the image in detail."
 ```
 
-### Text-to-image
+### 🖼️ Text-to-image Generation
+
+You can generate images from text prompts using the following command:
 
 ```shell
 export PYTHONPATH=./:$PYTHONPATH
@@ -66,12 +74,12 @@ python scripts/text2image.py configs/models/qwen2_5_1_5b_kl16_mar_h.py \
          --prompt 'a dog on the left and a cat on the right.'  --output output.jpg
 ```
 
-**To generate a list of images based on prompts in a json file.**
+To generate a list of images based on prompts in a json file.
 ```shell
 export PYTHONPATH=./:$PYTHONPATH
 accelerate launch scripts/batch_text2image.py configs/models/qwen2_5_1_5b_kl16_mar_h.py \
        --checkpoint checkpoints/harmon_1.5b.pth  --image_size 512 \
-       --data path/to/xxx.json --output output
+       --data path/to/xxx.json --output output --batch_size 4 --grid_size 2
 ```
 The json file should look like:
 
@@ -84,12 +92,16 @@ The json file should look like:
 ```
 
 
-## Citation
+## 📚 Citation
+
+If you find Harmon useful for your research or applications, please cite our paper using the following BibTeX:
 
 ```bibtex
 @misc{wu2025harmon,
-      title={Harmonizing Visual Representations for Unified Multimodal Understanding and Generation}, 
-      author={Size Wu and Wenwei Zhang and Lumin Xu and Sheng Jin and Zhonghua Wu and Qingyi Tao and Wentao Liu and Wei Li and Chen Change Loy},
+      title={Harmonizing Visual Representations for Unified Multimodal Understanding and 
+      Generation}, 
+      author={Size Wu and Wenwei Zhang and Lumin Xu and Sheng Jin and Zhonghua Wu and 
+      Qingyi Tao and Wentao Liu and Wei Li and Chen Change Loy},
       year={2025},
       eprint={2405.xxxxx},
       archivePrefix={arXiv},
@@ -97,5 +109,5 @@ The json file should look like:
 }
 ```
 
-## License
+## 📜 License
 This project is licensed under [NTU S-Lab License 1.0](LICENSE).
