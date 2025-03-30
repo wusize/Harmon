@@ -92,6 +92,28 @@ The json file should look like:
 ```
 
 
+### 🤗 Loading Models from Huggingface
+
+We have also converted our models to Huggingface format. You can also directly load Harmon models from Huggingface using the `transformers` library:
+
+```
+from transformers import AutoTokenizer, AutoModel
+harmon_tokenizer = AutoTokenizer.from_pretrained("wusize/Harmon-0_5B",
+                                                 trust_remote_code=True)
+harmon_model = AutoModel.from_pretrained("wusize/Harmon-0_5B",
+                                         trust_remote_code=True).eval().cuda().bfloat16()
+```
+
+For more information on the usage of HF-based models, refer to the model cards in 
+
+| Model Variant | Parameters | Hugging Face Hub |
+|:-------------:|:----------:|:----------------:|
+| **Harmon-0.5B** | 0.5B + 0.2B | [![Hugging Face](https://img.shields.io/badge/🤗%20Hugging%20Face-Model-orange)](https://huggingface.co/wusize/Harmon-0_5B) |
+| **Harmon-1.5B** | 1.5B + 0.9B | [![Hugging Face](https://img.shields.io/badge/🤗%20Hugging%20Face-Model-orange)](https://huggingface.co/wusize/Harmon-1_5B) |
+
+
+
+
 ## 📚 Citation
 
 If you find Harmon useful for your research or applications, please cite our paper using the following BibTeX:
