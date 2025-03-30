@@ -8,6 +8,7 @@
 >
 > [![arXiv](https://img.shields.io/badge/arXiv-2406.05821-b31b1b.svg)](https://arxiv.org/abs/2406.05821)
 > [![Project Page](https://img.shields.io/badge/Project-Page-green)](https://wusize.github.io/projects/Harmon)
+> [![HuggingFace](https://img.shields.io/badge/🤗%20Hugging%20Face-Model-orange)](https://huggingface.co/wusize/Harmon-1_5B)
 > [![Bibtex](https://img.shields.io/badge/Cite-BibTeX-blue)](https://github.com/wusize/Harmon#citation)
 
 ## Introduction
