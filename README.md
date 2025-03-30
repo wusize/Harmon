@@ -95,7 +95,7 @@ The json file should look like:
 
 ### 🤗 Loading Models from Huggingface
 
-We have also converted our models to Huggingface format. You can also directly load Harmon models from Huggingface using the `transformers` library:
+We have also converted our models to Huggingface format. You can directly load Harmon models from Huggingface using the `transformers` library:
 
 ```
 from transformers import AutoTokenizer, AutoModel
