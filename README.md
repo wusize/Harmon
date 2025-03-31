@@ -108,10 +108,10 @@ harmon_model = AutoModel.from_pretrained("wusize/Harmon-0_5B",
 
 For more information on the usage of HF-based models, refer to the model cards in 
 
-| Model Variant | Parameters | Hugging Face Hub |
-|:-------------:|:----------:|:----------------:|
-| **Harmon-0.5B** | 0.5B + 0.2B | [![Hugging Face](https://img.shields.io/badge/🤗%20Hugging%20Face-Model-orange)](https://huggingface.co/wusize/Harmon-0_5B) |
-| **Harmon-1.5B** | 1.5B + 0.9B | [![Hugging Face](https://img.shields.io/badge/🤗%20Hugging%20Face-Model-orange)](https://huggingface.co/wusize/Harmon-1_5B) |
+| Model Variant | LLM | MAR | Hugging Face Hub |
+|:-------------:|:---:|:---:|:----------------:|
+| **Harmon-0.5B** | Qwen2.5-0.5B-Instruct | MAR-Base | [![Hugging Face](https://img.shields.io/badge/🤗%20Hugging%20Face-Model-orange)](https://huggingface.co/wusize/Harmon-0_5B) |
+| **Harmon-1.5B** | Qwen2.5-1.5B-Instruct | MAR-Huge | [![Hugging Face](https://img.shields.io/badge/🤗%20Hugging%20Face-Model-orange)](https://huggingface.co/wusize/Harmon-1_5B) |
 
 
 
