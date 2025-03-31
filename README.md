@@ -134,3 +134,10 @@ If you find Harmon useful for your research or applications, please cite our pap
 
 ## 📜 License
 This project is licensed under [NTU S-Lab License 1.0](LICENSE).
+
+
+## 🙏 Acknowledgement
+The project builds upon the following open-source efforts:
+- [Qwen2.5](https://github.com/QwenLM/Qwen2.5): We use LLMs from Qwen2.5, including Qwen2.5-0.5B-Instruct and Qwen2.5-1.5B-Instruct.
+
+- [MAR](https://github.com/LTH14/mar): The image generation pipeline is retrofitted from MAR.
