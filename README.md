@@ -10,7 +10,7 @@
 > [![Project Page](https://img.shields.io/badge/Project-Page-green)](https://wusize.github.io/projects/Harmon)
 > [![HuggingFace](https://img.shields.io/badge/🤗%20Hugging%20Face-Model-orange)](https://huggingface.co/wusize/Harmon-1_5B)
 > [![HuggingFace Space](https://img.shields.io/badge/🤗%20Hugging%20Face-Space-blue)](https://huggingface.co/spaces/wusize/Harmon)
-> [![Bibtex](https://img.shields.io/badge/Cite-BibTeX-blue)](https://github.com/wusize/Harmon#citation)
+> [![Bibtex](https://img.shields.io/badge/Cite-BibTeX-blue)](https://github.com/wusize/Harmon##📚Citation)
 
 ## Introduction
 
