@@ -6,7 +6,7 @@
 >
 > Size Wu, Wenwei Zhang, Lumin Xu, Sheng Jin, Zhonghua Wu, Qingyi Tao, Wentao Liu, Wei Li, Chen Change Loy
 >
-> [![arXiv](https://img.shields.io/badge/arXiv-2406.05821-b31b1b.svg)](https://arxiv.org/abs/2503.21979)
+> [![arXiv](https://img.shields.io/badge/arXiv-2503.21979-b31b1b.svg)](https://arxiv.org/abs/2503.21979)
 > [![Project Page](https://img.shields.io/badge/Project-Page-green)](https://wusize.github.io/projects/Harmon)
 > [![HuggingFace](https://img.shields.io/badge/🤗%20Hugging%20Face-Model-orange)](https://huggingface.co/wusize/Harmon-1_5B)
 > [![HuggingFace Space](https://img.shields.io/badge/🤗%20Hugging%20Face-Space-blue)](https://huggingface.co/spaces/wusize/Harmon)
