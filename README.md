@@ -2,7 +2,7 @@
 
 ![](data/method.png)
 
-> **[Harmonizing Visual Representations for Unified Multimodal Understanding and Generation](https://arxiv.org/abs/2406.05821)**
+> **[Harmonizing Visual Representations for Unified Multimodal Understanding and Generation](https://arxiv.org/abs/2503.21979)**
 >
 > Size Wu, Wenwei Zhang, Lumin Xu, Sheng Jin, Zhonghua Wu, Qingyi Tao, Wentao Liu, Wei Li, Chen Change Loy
 >
