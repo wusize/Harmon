@@ -89,7 +89,7 @@ class Harmon(nn.Module):
     @torch.no_grad()
     def encode(self, x):
         posterior = self.vae.encode(x)
-        z = posterior.sample().mul_(self.vae_scale)
+        z = posterior.mode().mul_(self.vae_scale)
         z = rearrange(z, 'b c (m p) (n q) -> b m n (c p q)',
                       p=self.mar.patch_size, q=self.mar.patch_size)
 
