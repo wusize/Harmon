@@ -27,7 +27,7 @@ generation, with two model variants Harmon-0.5B and Harmon-1.5B.
 |------|--------|
 | 🛠️ Inference Code & Model Checkpoints | ✅ Released |
 | 🌐 Project Page | ✅ Finished |
-| 🤗 Online Demo | 🚧 Coming Soon |
+| 🤗 Online Demo |  ✅ [Finished](https://huggingface.co/spaces/wusize/Harmon) |
 
 
 ## Usage
