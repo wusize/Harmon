@@ -3,11 +3,9 @@ import math
 import numpy as np
 import torch.nn as nn
 from einops import rearrange
-from torch.nn.modules.module import T
 from transformers.cache_utils import DynamicCache
 from src.builder import BUILDER
 from tqdm import tqdm
-import torch.nn.functional as F
 from torch.nn.utils.rnn import pad_sequence
 
 
@@ -73,18 +71,6 @@ class Harmon(nn.Module):
     @property
     def token_embed_dim(self):
         return self.vae.embed_dim * (self.mar.patch_size ** 2)
-
-    def state_dict(self, *args, **kwargs):
-        state_dict = super().state_dict(*args, **kwargs)
-        state_dict = {k: v for k, v in state_dict.items()
-                      if 'vae.' not in k}
-
-        return state_dict
-
-    def train(self: T, mode: bool = True) -> T:
-        super().train(mode=mode)
-        self.vae.train(mode=False)
-        return self
 
     @torch.no_grad()
     def encode(self, x):
@@ -297,60 +283,3 @@ class Harmon(nn.Module):
         if cfg != 1.0:
             pred = pred[:bsz//2]
         return pred
-
-    def text2image_loss(self, data_dict):
-        x = data_dict['pixel_values'].to(dtype=self.dtype, device=self.device)
-        x = self.encode(x)   # b m n c
-        b, m, n, _ = x.shape
-        gt_latents = x.clone().detach().view(b, m*n, -1)
-
-        orders = self.mar.sample_orders(bsz=b, seq_len=m*n)
-        mask = self.mar.random_masking(x.flatten(1, 2), orders)
-
-        input_ids = data_dict['input_ids'].to(self.device)
-        attention_mask = data_dict['attention_mask'].to(self.device)
-        x_enc = self.forward_mae_encoder(x, mask, input_ids=input_ids,
-                                         attention_mask=attention_mask)
-        z = self.mar.forward_mae_decoder(x_enc, mask, image_shape=(m, n))
-
-        loss = self.mar.forward_loss(z=z, target=gt_latents, mask=mask)
-
-        return loss
-
-    def image2text_loss(self, data_dict):
-        input_ids = data_dict['input_ids'].to(self.device)
-        attention_mask = data_dict['attention_mask'].to(self.device)
-        labels = data_dict['labels'].to(self.device)
-
-        pixel_values = data_dict.get('pixel_values', None)
-        if pixel_values is None:
-            inputs_embeds = self.llm.get_input_embeddings()(input_ids)
-            _, z_null = self.extract_visual_feature(
-                torch.zeros(1, 16, 16, self.token_embed_dim,
-                            dtype=self.dtype, device=self.device)
-            )
-            loss_null = z_null.mean() * 0.0
-            print(f"No image found in this batch!", flush=True)
-        else:
-            x = pixel_values.to(dtype=self.dtype, device=self.device)
-            x = self.encode(x)  # b m n c
-            _, z_enc = self.extract_visual_feature(x)
-
-            inputs_embeds = z_enc.new_zeros(*input_ids.shape, self.llm.config.hidden_size)
-            inputs_embeds[input_ids == -200] = z_enc.flatten(0, 1)
-            inputs_embeds[input_ids != -200] = self.llm.get_input_embeddings()(input_ids[input_ids != -200])
-            loss_null = 0.0
-
-        output = self.llm_model(inputs_embeds=inputs_embeds,
-                                attention_mask=attention_mask,
-                                return_dict=True)
-
-        last_hidden_state = output.last_hidden_state[:, :-1]
-        labels = labels[:, 1:]
-        last_hidden_state = last_hidden_state[labels >= 0]
-        labels = labels[labels >= 0]
-        logits = self.llm.get_output_embeddings()(last_hidden_state)
-
-        loss_i2t = F.cross_entropy(input=logits, target=labels)
-
-        return loss_i2t + loss_null

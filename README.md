@@ -28,6 +28,7 @@ generation, with two model variants Harmon-0.5B and Harmon-1.5B.
 | 🛠️ Inference Code & Model Checkpoints | ✅ Released |
 | 🌐 Project Page | ✅ Finished |
 | 🤗 Online Demo |  ✅ [Finished](https://huggingface.co/spaces/wusize/Harmon) |
+| 🔄 Finetuning Code | ✅ Finished |
 
 
 ## Usage
@@ -114,6 +115,9 @@ For more information on the usage of HF-based models, refer to the model cards i
 | **Harmon-1.5B** | Qwen2.5-1.5B-Instruct | MAR-Huge | [![Hugging Face](https://img.shields.io/badge/🤗%20Hugging%20Face-Model-orange)](https://huggingface.co/wusize/Harmon-1_5B) |
 
 
+### 🔄 Finetuning Harmon
+
+For instructions on how to finetune Harmon models on your custom datasets, please refer to our detailed guide in [FINETUNE.md](FINETUNE.md).
 
 
 ## 📚 Citation
