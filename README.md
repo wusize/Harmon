@@ -32,7 +32,7 @@ generation, with two model variants Harmon-0.5B and Harmon-1.5B.
 
 
 
-## 🔄 Update
+### 🔄 Update
 We fine-tuned Harmon-1.5B using [BLIP3o-60k](https://huggingface.co/datasets/BLIP3o/BLIP3o-60k) dataset. During fine-tuning, we only updated the parameters of the MAR decoder. The fine-tuned model achieves 0.85 on GenEval. The model checkpoint is available at [harmon_1.5b-o.pth](https://huggingface.co/wusize/harmon/blob/main/harmon_1.5b-o.pth).
 
 
