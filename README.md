@@ -1,3 +1,6 @@
+
+
+
 ### Checkpoints
 Obtain checkpoints from [wusize/harmon](https://huggingface.co/wusize/harmon), and arrange the model checkpoints as
 ```text
@@ -6,11 +9,15 @@ Harmon/
     ├── kl16.ckpt
     ├── harmon_0.5b.pth
     ├── harmon_1.5b.pth
+    ├── harmon_1.5b-o.pth  # Fine-tuned model on BLIP3o-60k
 ```
 It is recommended to use the following command to download the checkpoints
 ```bash
 huggingface-cli download wusize/harmon  --local-dir checkpoints --repo-type model
 ```
+
+### Update
+We fine-tuned Harmon-1.5B using [BLIP3o-60k](https://huggingface.co/datasets/BLIP3o/BLIP3o-60k) dataset. During fine-tuning, we only updated the parameters of the MAR decoder. The fine-tuned model achieves 0.85 on GenEval. The model checkpoint is available at [harmon_1.5b-o.pth](https://huggingface.co/wusize/harmon/blob/main/harmon_1.5b-o.pth).
 
 
 ### Image-to-text 
