@@ -131,7 +131,7 @@ For instructions on how to finetune Harmon models on your custom datasets, pleas
 If you find Harmon useful for your research or applications, please cite our paper using the following BibTeX:
 
 ```bibtex
-@misc{wu2025harmon,
+@article{wu2025harmon,
       title={Harmonizing Visual Representations for Unified Multimodal Understanding and Generation}, 
       author={Size Wu and Wenwei Zhang and Lumin Xu and Sheng Jin and Zhonghua Wu and Qingyi Tao and Wentao Liu and Wei Li and Chen Change Loy},
       year={2025},
